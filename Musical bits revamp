@@ -1,0 +1,76 @@
+function setup() {
+    noCanvas();
+}
+
+const notes = [
+    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+];
+
+
+const noteMap = [];
+for (let i = 0; i < 256; i++) {
+    if (i < 12) noteMap.push(notes[i] + "0");
+    else if (i < 24) noteMap.push(notes[i % 12] + "1");
+    else if (i < 36) noteMap.push(notes[i % 12] + "2");
+    else if (i < 48) noteMap.push(notes[i % 12] + "3");
+    else if (i < 60) noteMap.push(notes[i % 12] + "4");
+    else if (i < 72) noteMap.push(notes[i % 12]+"5");
+    else if (i < 84) noteMap.push(notes[i % 12]+"6");
+    else if (i < 96) noteMap.push(notes[i % 12]+"7");
+    else if (i < 108) noteMap.push(notes[i % 12]+"8");
+    else if (i < 120) noteMap.push(notes[i % 12]+"9");
+    else if (i < 132) noteMap.push(notes[i % 12]+"10");
+    else if (i < 144) noteMap.push(notes[i % 12]+"11");
+    else if (i < 156) noteMap.push(notes[i % 12]+"12");
+    else if (i < 168) noteMap.push(notes[i % 12]+"13");
+    else if (i < 180) noteMap.push(notes[i % 12]+"14");
+    else if (i < 192) noteMap.push(notes[i % 12]+"15");
+    else if (i < 204) noteMap.push(notes[i % 12]+"16");
+    else if (i < 216) noteMap.push(notes[i % 12]+"17");
+    else if (i < 228) noteMap.push(notes[i % 12]+"18");
+    else if (i < 240) noteMap.push(notes[i % 12]+"19");
+    else noteMap.push(notes[i % 12] + "20");
+}
+
+
+function encrypt(byteArray) {
+    let encryptedString = "";
+    for (let i = 0; i < byteArray.length; i++) {
+        let byte = byteArray[i];
+        let binary = byte.toString(2).padStart(8, '0');
+        if (byte >= 0) {
+            if (byte <= 255) {
+                encryptedString += noteMap[byte] + "-" + binary + " ";
+            }
+        }
+    }
+    return encryptedString.trim();
+}
+
+function decrypt(noteString) {
+    let byteArray = [];
+    let noteArray = noteString.split(" ");
+    for (let i = 0; i < noteArray.length; i++) {
+        let parts = noteArray[i].split("-");
+        let note = parts[0];
+        let binary = parts[1];
+        let index = -1;
+        for (let j = 0; j < noteMap.length; j++) {
+            if (noteMap[j] === note) {
+                index = j;
+                break;
+            }
+        }
+        if (index !== -1 && index.toString(2).padStart(8, '0') === binary) {
+            byteArray.push(index);
+        }
+    }
+    return byteArray;
+}
+// testing encrypt and decrypt func
+let sampleBytes = encrypt(sampleBytes);
+console.log("Encrypted:", encrypted);
+let decrypted = decrypt(encrypted);
+console.log("Decrypted:", decrypted);
+
+["C 1/4 4", "C 1/4 4", "G 1/4 4", "G 1/4 4", "A 1/4 4", "A 1/4 4", "G 1/2 4", "F 1/4 4", "F 1/4 4", "E 1/4 4", "E 1/4 4", "D 1/4 4", "D 1/4 4", "C 1/2 4"]
