@@ -1,0 +1,101 @@
+var data = [
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 1, 1, 1, 0, 0, 0],
+  [0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 1, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+
+function updateGridView() {
+  var gridString = "";
+  for (var row = 0; row < 8; row++) {
+    for (var col = 0; col < 8; col++) {
+      if (data[row][col] === 0) {
+        gridString += "- ";
+      } else {
+        gridString += "* ";
+      }
+    }
+    gridString += "\n";
+  }
+  setText("gridDisplayLabel", gridString);
+}
+
+updateGridView();
+
+
+function setCellAlive(row, col) {
+  data[row][col] = 1;
+  updateGridView();
+}
+
+
+onEvent("setAliveButton", "click", function() {
+  var row = getNumber("rowInput");
+  var col = getNumber("colInput");
+  setCellAlive(row, col);
+});
+
+
+onEvent("resetColonyButton", "click", function() {
+  for (var row = 0; row < 8; row++) {
+    for (var col = 0; col < 8; col++) {
+      data[row][col] = 0;
+    }
+  }
+  updateGridView();
+});
+
+
+function getNumLivingNeighbors(row, col) {
+  var count = 0;
+  for (var r = row - 1; r <= row + 1; r++) {
+    for (var c = col - 1; c <= col + 1; c++) {
+      if (r >= 0 && r < 8 && c >= 0 && c < 8) {
+        if (!(r === row && c === col)) {
+          if (data[r][c] === 1) {
+            count++;
+          }
+        }
+      }
+    }
+  }
+  return count;
+}
+
+function evolve() {
+  var nextGen = [];
+
+  for (var row = 0; row < 8; row++) {
+    nextGen[row] = [];
+    for (var col = 0; col < 8; col++) {
+      var neighbors = getNumLivingNeighbors(row, col);
+      var current = data[row][col];
+
+      if (current === 1 && (neighbors === 2 || neighbors === 3)) {
+        nextGen[row][col] = 1;
+      } else if (current === 0 && neighbors === 3) {
+        nextGen[row][col] = 1;
+      } else {
+        nextGen[row][col] = 0;
+      }
+    }
+  }
+
+
+  for (var row = 0; row < 8; row++) {
+    for (var col = 0; col < 8; col++) {
+      data[row][col] = nextGen[row][col];
+    }
+  }
+}
+
+
+onEvent("evolveButton", "click", function() {
+  evolve();
+  updateGridView();
+});
