@@ -1,0 +1,32 @@
+function setup() {
+  createCanvas(400, 400,);
+}
+
+var centerX = 120
+var centerY = 51
+var velX = 5		
+var velY = 5	
+
+
+
+
+function draw() {
+  background(22,30,200);
+  fill("red")
+  square(centerX, centerY, 55)
+  moveCircle()
+    
+    
+}
+
+function moveCircle() {
+  		centerX = centerX + velX
+        centerY = centerY + velY
+  	if (centerX + velX + 25 >= 400 || centerX + velX - 12 <= 0) {
+    		velX = -1 * velX
+  	}
+	if (centerY + velY + 25 >= 400 || centerY + velY - 12 <= 0) {
+    		velY = -.1 * velY
+  	}
+
+}
