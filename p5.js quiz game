@@ -1,0 +1,125 @@
+
+var centerX = 120
+var centerY = 51
+var velX = 5		
+var velY = 5	
+
+
+
+
+let score = 0;
+let questionIndex = 0;
+
+let num1;
+let submitButton;
+let feedback;
+
+let questions = [
+  {
+    question: "What team had a defense called the 'No Fly Zone'?",
+    answer: "broncos"
+  },
+  {
+    question: " did Marshawn Lynch play for the 49ers ?",
+    answer: "no"
+  },
+  {
+    question: "How many times have the Patriots won the Super Bowl?",
+    answer: "6"
+  },
+  {
+    question: "What WR was nicknamed Megatron?",
+    answer: "calvin johnson"
+  },
+   {
+    question: "What WR has had the most 1000 yard seasons ?",
+    answer: "jerry rice"
+  }
+];
+
+function setup() {
+  createCanvas(400, 400,);
+  football = loadImage('football.jpeg')
+
+  textSize(18);
+ textAlign(CENTER);
+  text('Football Quiz!', width / 2, 50);
+  
+
+  num1 = createInput('');
+  num1.position(120, 120);
+  
+
+  submitButton = createButton('Submit');
+  submitButton.position(100, 210);
+  submitButton.mousePressed(checkAnswer);
+  
+
+  feedback = createP('');
+  feedback.position(120, 200);
+
+    
+ result = createP('');
+result.position(20, 160);
+
+function calcSum() {
+  
+    const value1 = parseFloat(num1.value());
+    const value2 = parseFloat(num2.value());
+    sum = value1 + value2;
+     result.html(' answer ' + sum);
+}
+}
+
+
+function draw() {
+  background(120,1100,180);
+  textSize(16);fill("red")
+ image(football,centerX, centerY, 50,40)
+  moveCircle()
+  function moveCircle() {
+  		centerX = centerX + velX
+        centerY = centerY + velY
+  	if (centerX + velX + 25 >= 400 || centerX + velX - 12 <= 0) {
+    		velX = -1 * velX
+  	}
+	if (centerY + velY + 25 >= 400 || centerY + velY - 12 <= 0) {
+    		velY = -.1 * velY
+  	}
+
+}
+
+  
+
+
+  
+ text(questions[questionIndex].question, width / 2, 90);
+
+  
+ 
+  text("Score: " + score, width - 130, 30);
+  
+
+  feedback.html('');
+}
+
+function checkAnswer() {
+  
+  let userAnswer = num1.value().toLowerCase().trim();
+  
+
+  if (userAnswer === questions[questionIndex].answer) {
+    score++;
+    feedback.html('Correct!');
+  } else {
+    feedback.html('Incorrect!');
+  }
+  num1.value('');
+  questionIndex++;
+  if (questionIndex >= questions.length) {
+    submitButton.hide();
+    feedback.html("Quiz Complete! your final Score is : " + score);
+  }
+}
+
+
